@@ -1,73 +1,229 @@
-# React + TypeScript + Vite
+# AquaSense360
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A smart irrigation system designed to optimize water usage through real-time soil monitoring, weather-aware irrigation decisions, and automated irrigation control.
 
-Currently, two official plugins are available:
+## Overview
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+AquaSense360 is an IoT-enabled smart irrigation system that combines soil moisture monitoring, environmental conditions, weather information, and automated irrigation logic to determine when irrigation is required.
 
-## React Compiler
+The system is designed to reduce unnecessary water consumption while maintaining appropriate soil moisture conditions for agricultural applications.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+The project consists of a web-based monitoring interface, an IoT layer for collecting field data, backend services for processing and managing data, and an automated irrigation control mechanism.
 
-## Expanding the ESLint configuration
+## Problem Statement
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Conventional irrigation systems often depend on fixed schedules or manual intervention. This can result in:
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- Over-irrigation and unnecessary water consumption
+- Under-irrigation during high-temperature conditions
+- Irrigation during or immediately before rainfall
+- Lack of real-time soil condition monitoring
+- Limited visibility into water usage and irrigation activity
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+AquaSense360 addresses these limitations through condition-based and weather-aware irrigation.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## System Objectives
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- Monitor soil moisture and environmental conditions in real time
+- Determine irrigation requirements based on available sensor data
+- Incorporate weather conditions into irrigation decisions
+- Automate irrigation through hardware control
+- Reduce unnecessary water consumption
+- Provide real-time monitoring and irrigation insights
+- Support adaptive irrigation scheduling
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## System Architecture
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+```text
++-----------------------+
+|   Soil Moisture       |
+|       Sensors         |
++-----------+-----------+
+            |
+            v
++-----------------------+
+|        ESP32          |
+| Sensor Data Collection|
++-----------+-----------+
+            |
+            v
++-----------------------+
+|       Backend         |
+| Data Processing       |
+| Irrigation Logic      |
++-----------+-----------+
+            |
+       +----+----+
+       |         |
+       v         v
++-----------+ +----------------+
+| Weather   | | Irrigation     |
+| Data      | | Decision Logic |
++-----------+ +-------+--------+
+                       |
+                       v
+              +----------------+
+              | Relay Module   |
+              +-------+--------+
+                      |
+                      v
+              +----------------+
+              | Water Pump     |
+              +----------------+
+
+                      |
+                      v
+
+              +----------------+
+              | Web Interface  |
+              | Monitoring and  |
+              | Analytics       |
+              +----------------+
+
+Core Features
+Real-Time Soil Monitoring
+
+The system collects soil moisture data through sensors to determine the current moisture condition of the field.
+
+Weather-Aware Irrigation
+
+Weather conditions are considered when determining whether irrigation should be initiated or delayed.
+
+Automated Irrigation
+
+The irrigation system can automatically control the water pump based on the irrigation decision generated by the system.
+
+Rain-Hold Logic
+
+When rainfall is expected or detected, irrigation can be delayed to avoid unnecessary water usage.
+
+Heatwave Protection
+
+The irrigation logic accounts for high-temperature conditions when determining irrigation requirements.
+
+Climate-Aware Scheduling
+
+Irrigation schedules can adapt to environmental and weather conditions rather than relying exclusively on fixed time intervals.
+
+Real-Time Monitoring
+
+The web interface provides a centralized view of relevant irrigation and environmental information.
+
+Water Usage Analysis
+
+The system is designed to provide information that can be used to analyze irrigation activity and identify opportunities for reducing water consumption.
+
+Technology Stack
+Frontend
+React
+TypeScript
+Vite
+Tailwind CSS
+Framer Motion
+Lucide React
+IoT and Hardware
+ESP32
+Soil Moisture Sensor
+Relay Module
+Water Pump
+Backend
+
+Backend services are being integrated into the project to handle data processing, communication between the IoT layer and frontend, and irrigation-related operations.
+
+Weather Data
+
+Weather information is incorporated into the irrigation decision-making process to account for rainfall and environmental conditions.
+
+Irrigation Decision Flow
+Sensor Data
+     |
+     v
+Soil Moisture Analysis
+     |
+     v
+Weather Condition Analysis
+     |
+     +----------------------+
+     |                      |
+     v                      v
+Rain Expected?          High Heat?
+     |                      |
+    Yes                     |
+     |                      |
+     v                      v
+Delay Irrigation      Adjust Irrigation
+     |                      |
+     +----------+-----------+
+                |
+                v
+       Irrigation Required?
+                |
+          +-----+-----+
+          |           |
+         Yes          No
+          |           |
+          v           v
+    Activate Pump   Keep Pump Off
+          |
+          v
+    Monitor Conditions
+
+Hardware Components
+
+The system is designed around the following hardware components:
+
+Component	Purpose
+ESP32	Microcontroller and communication layer
+Soil Moisture Sensor	Measures soil moisture
+Relay Module	Controls the water pump
+Water Pump	Performs automated irrigation
+Repository Structure
+
+The current repository contains the web interface and frontend implementation.
+
+The project is being expanded to include the complete backend and IoT implementation.
+
+The intended structure is:
+
+AquaSense360/
+├── frontend/
+├── backend/
+├── hardware/
+├── README.md
+└── ...
+
+Future Development
+
+Planned development includes:
+
+Backend API implementation
+ESP32 firmware integration
+Real-time sensor data transmission
+Sensor-to-backend communication
+Backend-to-frontend real-time updates
+Weather API integration
+Automated pump control
+Persistent storage for sensor and irrigation data
+Historical irrigation analytics
+Remote irrigation monitoring and control
+Improved irrigation prediction and decision-making
+
+Installation
+
+Clone the repository:
+
+git clone https://github.com/Dinah-02/AquaSense360.git
+
+Navigate to the project directory:
+
+cd AquaSense360
+
+Install dependencies:
+
+npm install
+
+Start the development server:
+
+npm run dev
+
+The application will be available at the local development URL provided by Vite.

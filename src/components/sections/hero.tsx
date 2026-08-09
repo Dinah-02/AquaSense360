@@ -4,83 +4,144 @@ import { motion } from "framer-motion"
 import { useEffect, useState } from "react"
 
 export default function Hero() {
-  const [videoLoaded, setVideoLoaded] = useState(false)
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    const timer = setTimeout(() => setVideoLoaded(true), 500)
-    return () => clearTimeout(timer)
+    setTimeout(() => setMounted(true), 200)
   }, [])
 
   return (
-    /* pt-6 reduces the top gap significantly. px-4 creates a very small, equal symmetrical border on both sides. */
-    <section className="relative w-full h-screen bg-white pt-6 px-4 pb-0 overflow-hidden flex flex-col">
-      <motion.div
-        initial={{ opacity: 1 }}
-        animate={{ opacity: 0 }}
-        transition={{ duration: 1, delay: 0 }}
-        className="absolute inset-0 bg-white z-40"
+    <section
+      style={{
+        width: "100%",
+        height: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background:
+          "linear-gradient(180deg, #0F172A 0%, #020617 60%, #020617 100%)",
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
+      {/* Ambient background glow */}
+      <div
+        style={{
+          position: "absolute",
+          width: "900px",
+          height: "900px",
+          background: "#1E293B",
+          borderRadius: "50%",
+          filter: "blur(200px)",
+          opacity: 0.15,
+        }}
       />
 
-      {/* Video Container - No rounding, sharp edges as requested. flex-grow fills the screen. */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 0.5 }}
-        className="relative w-full flex-grow overflow-hidden"
+      <div
+        style={{
+          position: "relative",
+          zIndex: 10,
+          maxWidth: "900px",
+          textAlign: "center",
+          padding: "0 24px",
+        }}
       >
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          src="/field-video.mp4"
-          className="absolute inset-0 w-full h-full object-cover"
-          onCanPlay={() => setVideoLoaded(true)}
-        />
-        <div className="absolute inset-0 bg-black/30" />
+        {/* LINE 1 */}
+        <motion.h1
+          initial={{ opacity: 0 }}
+          animate={{ opacity: mounted ? 1 : 0 }}
+          transition={{ duration: 1.2, delay: 0.3 }}
+          style={{
+            fontSize: "clamp(3rem, 6vw, 4.5rem)",
+            fontWeight: 600,
+            color: "#E5E7EB",
+            marginBottom: "12px",
+            letterSpacing: "-0.02em",
+          }}
+        >
+          Cloud-Native CI/CD Platform
+        </motion.h1>
 
-        {/* Hero Text Content */}
+        {/* LINE 2 */}
+        <motion.h1
+          initial={{ opacity: 0 }}
+          animate={{ opacity: mounted ? 1 : 0 }}
+          transition={{ duration: 1.2, delay: 0.6 }}
+          style={{
+            fontSize: "clamp(3rem, 6vw, 4.5rem)",
+            fontWeight: 600,
+            color: "#94A3B8",
+            marginBottom: "32px",
+            letterSpacing: "-0.02em",
+          }}
+        >
+          for Modern DevOps Teams
+        </motion.h1>
+
+        {/* DESCRIPTION */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: mounted ? 1 : 0 }}
+          transition={{ duration: 1.2, delay: 0.9 }}
+          style={{
+            fontSize: "1.125rem",
+            lineHeight: 1.7,
+            color: "#9CA3AF",
+            maxWidth: "680px",
+            margin: "0 auto 56px",
+          }}
+        >
+          Deploy with confidence using Kubernetes-native pipelines. Automated
+          builds, real-time logs, and seamless integrations — powered by Tekton
+          and Argo Workflows.
+        </motion.p>
+
+        {/* BUTTONS */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: mounted ? 1 : 0 }}
           transition={{ duration: 1, delay: 1.2 }}
-          className="relative z-20 h-full flex flex-col items-start justify-center text-left px-8 md:px-16 lg:px-24"
+          style={{
+            display: "flex",
+            gap: "16px",
+            justifyContent: "center",
+            flexWrap: "wrap",
+          }}
         >
-          <motion.h1
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 1.3 }}
-            className="text-6xl md:text-7xl font-bold text-white mb-6 text-balance-heading max-w-5xl"
+          <button
+            style={{
+              padding: "16px 32px",
+              borderRadius: "14px",
+              background: "#E5E7EB",
+              color: "#020617",
+              fontWeight: 600,
+              fontSize: "1rem",
+              border: "none",
+              cursor: "pointer",
+              boxShadow: "0 10px 30px rgba(0,0,0,0.35)",
+            }}
           >
-            AquaSense 360
-          </motion.h1>
+            Get Started Free →
+          </button>
 
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.5 }}
-            className="text-xl md:text-2xl text-white/90 mb-12 max-w-3xl text-balance-heading leading-relaxed"
+          <button
+            style={{
+              padding: "16px 32px",
+              borderRadius: "14px",
+              background: "rgba(30,41,59,0.6)",
+              color: "#E5E7EB",
+              fontWeight: 500,
+              fontSize: "1rem",
+              border: "1px solid rgba(148,163,184,0.12)",
+              backdropFilter: "blur(14px)",
+              WebkitBackdropFilter: "blur(14px)",
+              cursor: "pointer",
+            }}
           >
-            An intelligent irrigation system that monitors soil moisture in real-time, predicts weather conditions, and
-            automatically controls watering — saving water, protecting crops, and making farming smarter.
-          </motion.p>
-
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 1.7 }}>
-            <button className="btn-secondary px-8 py-4 text-lg">Explore</button>
-          </motion.div>
+            View Architecture
+          </button>
         </motion.div>
-
-        {/* Scroll Indicator */}
-        <motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20"
-        >
-          <div className="w-6 h-10 border-2 border-white rounded-full flex items-center justify-center">
-            <div className="w-1 h-2 bg-white rounded-full" />
-          </div>
-        </motion.div>
-      </motion.div>
+      </div>
     </section>
   )
 }
